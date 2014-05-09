@@ -2,7 +2,7 @@
 ^!SPACE::  Winset, Alwaysontop,Off, A
 
 ;SetTitleMatchMode, 2
-;#IfWinExist ahk_class µð¾Æºí·Î
+;#IfWinExist ahk_class ë””ì•„ë¸”ë¡œ
 d3hwnd := InitDiabloHandle()
 
 count := 0
@@ -24,9 +24,9 @@ ItemSearchAndPick()
     MouseMove, 10, 10
     global width
     global height
-    _rx := width - 100
+    _rx := width - 200
     _ry := height - 70
-    PixelSearch, Px, Py, 100, 170, %_rx%, %_ry%, 0x01ef01, 6, Fast
+    PixelSearch, Px, Py, 200, 170, %_rx%, %_ry%, 0x01ef01, 6, Fast
     if ErrorLevel = 0
     {
       sleep 500
@@ -35,7 +35,7 @@ ItemSearchAndPick()
     }
     else
     {
-      PixelSearch, Px, Py, 100, 170, %_rx%, %_ry%, 0x027af1, 6, Fast
+      PixelSearch, Px, Py, 200, 170, %_rx%, %_ry%, 0x027af1, 6, Fast
       ;0x027af1
       if ErrorLevel = 0
       {
@@ -74,6 +74,7 @@ ExitRoom()
   WinActivate,ahk_id %d3hwnd%
 }
 
++F2::
 F2::
 pause
 return
@@ -293,7 +294,7 @@ InitDiabloHandle()
 {
   SetTitleMatchMode, 2
   WinGet, _d3hwnd, ID, III
-  ;WinGet, _d3hwnd, ID, µð¾Æºí·Î
+  ;WinGet, _d3hwnd, ID, ë””ì•„ë¸”ë¡œ
   if (!_d3hwnd)
   {
     MsgBox, diablo client is not running!
@@ -371,7 +372,7 @@ MenuClick(x, y, align = "m")
   xx := x
   yy := y
   ;MsgBox, %xx%, %x%, %width%, %yy%, %y%, %height%
-  ;ControlClick,, ahk_id %d3hwnd%,,L,, NA  x%x% y%y%
+;  ControlClick,, ahk_id %d3hwnd%,,L,, NA  x%x% y%y%
   Click %x%, %y%
   Sleep 100
   ;return x + y; "Return" expects an expression.
