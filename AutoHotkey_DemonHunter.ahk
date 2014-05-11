@@ -17,6 +17,7 @@ MoveToGhomeGate()
   sleep 3000
   MouseMove, 10, 10
 }
+
 ItemSearchAndPick()
 {
   Loop, 10
@@ -24,9 +25,11 @@ ItemSearchAndPick()
     MouseMove, 10, 10
     global width
     global height
-    _rx := width - 200
-    _ry := height - 70
-    PixelSearch, Px, Py, 200, 170, %_rx%, %_ry%, 0x01ef01, 6, Fast
+    _lx := 200
+    _ly := 170
+    _rx := width - _lx
+    _ry := height - _ly
+    PixelSearch, Px, Py, %_lx%, %_ly%, %_rx%, %_ry%, 0x01ef01, 6, Fast
     if ErrorLevel = 0
     {
       sleep 500
@@ -35,7 +38,7 @@ ItemSearchAndPick()
     }
     else
     {
-      PixelSearch, Px, Py, 200, 170, %_rx%, %_ry%, 0x027af1, 6, Fast
+      PixelSearch, Px, Py, %_lx%, %_ly%, %_rx%, %_ry%, 0x027af1, 6, Fast
       ;0x027af1
       if ErrorLevel = 0
       {
@@ -53,18 +56,14 @@ ItemSearchAndPick()
 
 ExitRoom()
 {
+  global d3hwnd
   WinActivate,ahk_id %d3hwnd%
-  ControlSend, , {space}, ahk_id %d3hwnd%
-  Sleep 200
-  ControlSend, , {space}, ahk_id %d3hwnd%
-  Sleep 200
-  ControlSend, , {space}, ahk_id %d3hwnd%
-  Sleep 200
-  ControlSend, , {space}, ahk_id %d3hwnd%
-  Sleep 200
-  ControlSend, , {space}, ahk_id %d3hwnd%
-  Sleep 200
-  ControlSend, , {space}, ahk_id %d3hwnd%
+  CloseAllOpenedUI()
+  CloseAllOpenedUI()
+  CloseAllOpenedUI()
+  CloseAllOpenedUI()
+  CloseAllOpenedUI()
+  CloseAllOpenedUI()
   Sleep 10000
   WinActivate,ahk_id %d3hwnd%
   ControlSend, , {esc}, ahk_id %d3hwnd%
@@ -74,22 +73,109 @@ ExitRoom()
   WinActivate,ahk_id %d3hwnd%
 }
 
+RemoveAllSkillFromSkillWin()
+{
+  global d3hwnd
+  InitDiabloHandle()
+  WinActivate,ahk_id %d3hwnd%
+  CloseAllOpenedUI()
+;  ControlSend, , {s}, ahk_id %d3hwnd%
+
+  Send S
+  marginx := 37
+  uix := 238
+  Loop, 6
+  {
+    Click down l %uix% 601
+    sleep 50
+    Click up l %uix% 543
+    sleep 50
+    click l %uix% 543
+    uix := uix + marginx
+  }
+  sklx := 305
+  skrx := 515
+  sk1y := 145
+  sk2y := 240
+  sk3y := 320
+  ;Loop, 6
+  ssky := 145
+  runey := 272
+  rune1x := 286
+  rune2x := 366
+  rune3x := 446
+  rune4x := 526
+  rune5x := 606
+  {
+    click l %sklx% %sk1y%
+    click l 190 %ssky%
+    click l 447 %ssky%
+    click l %rune4x% %runey%
+    click l 340 481
+
+    click l %skrx% %sk1y%
+    click l 625 %ssky%
+    click l 625 %ssky%
+    click l 367 %ssky%
+    click l %rune2x% %runey%
+    click l 340 481
+
+    click l %sklx% %sk2y%
+    click l 625 %ssky%
+    click l 625 %ssky%
+    click l 527 %ssky%
+    click l %rune5x% %runey%
+    click l 340 481
+
+    click l %skrx% %sk2y%
+    click l 190 %ssky%
+    click l 330 %ssky%
+    click l %rune5x% %runey%
+    click l 340 481
+
+    click l %sklx% %sk3y%
+    click l 190 %ssky%
+    click l 447 %ssky%
+    click l %rune5x% %runey%
+    click l 340 481
+
+    click l %skrx% %sk3y%
+    click l 190 %ssky%
+    click l 190 %ssky%
+    click l 527 %ssky%
+    click l %rune4x% %runey%
+    click l 340 481
+  }
+}
+
+F1::
+InitDiabloHandle()
+WinActivate,ahk_id %d3hwnd%
+click r 79 582
+click l 142 476
+return
+
 +F2::
 F2::
 pause
 return
 
 F3::
-send, {shift up}
-InitDiabloHandle()
-WinActivate,ahk_id %d3hwnd%
-ItemSearchAndPick()
-;ControlSend, , t, ahk_id %d3hwnd%
-Send, T
-sleep 9000
-ExitRoom()
-;return
+ToggleDemonHunterSkill:
+;static executeCount := 0
+RemoveAllSkillFromSkillWin()
+if executeCount = 0
+{
+  
+}
+else
+{
+  
+}
+return 
+
 F4::
+GhomeRun:
 send, {shift up}
 InitDiabloHandle()
 WinActivate,ahk_id %d3hwnd%
@@ -121,7 +207,16 @@ Sleep, 6000
 WinActivate,ahk_id %d3hwnd%
 ;FightGhome()
 gosub, FightGh
-Send, {F3}
+send, {shift up}
+InitDiabloHandle()
+WinActivate,ahk_id %d3hwnd%
+ItemSearchAndPick()
+;ControlSend, , t, ahk_id %d3hwnd%
+Send, T
+sleep 9000
+ExitRoom()
+Send, {F4}
+goto GhomeRun
 return
 
 FightGh:
@@ -134,6 +229,8 @@ sleep, 200
 send, 2
 sleep, 200
 send, 3
+sleep, 200
+send, 4
 sleep, 200
 send, {shift down}
 ;settimer, SkillLBtn, 600
@@ -149,42 +246,6 @@ send, {shift up}
 settimer, SkillRBtn, off
 settimer, SkillQ, off
 click up, left
-return
-
-F11::
-InitDiabloHandle()
-count++
-
-if Mod(count, 2) = 1
-{
-;  ControlClick,, ahk_id %d3hwnd%,, MIDDLE,, NA D x%centerX% y%centerY%
-;  ControlSend, , z, ahk_id %d3hwnd%
-  ControlSend, , {3 down}, ahk_id %d3hwnd%
-  SetTimer, skill3, 9000
-;  SetTimer, Skill1, 3423
-;  SetTimer, Skill2, 194423
-;  SetTimer, skill3, 170705
-;  SetTimer, Skill4, 130607
-;  SetTimer, SkillQ, 30300
-;  SetTimer, SkillLBtn, 871
-;  Click down
-;  SetTimer, SkillRBtn, 4071
-;  SetTimer, ClickRevive, 29700
-}
-else
-{
-  Click up
-;  ControlClick,, ahk_id %d3hwnd%,, MIDDLE,, NA U x%centerX% y%centerY%
-;  ControlSend, , z, ahk_id %d3hwnd%
-  SetTimer, Skill1, off
-  SetTimer, Skill2, off
-  SetTimer, Skill3, off
-  SetTimer, Skill4, off
-  SetTimer, SkillQ, off
-  SetTimer, SkillLBtn, off
-  SetTimer, SkillRBtn, off
-  SetTimer, ClickRevive, off
-}
 return
 
 Skill1:
@@ -284,7 +345,7 @@ ClickStartButton()
 
 CloseAllOpenedUI()
 {
-  Send {SPACE}
+  Send {space}
 ;  global d3hwnd
 ;  ControlSend, , {SPACE}, ahk_id %d3hwnd%
   sleep 100
