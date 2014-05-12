@@ -189,7 +189,7 @@ return
 executeCount := 0
 F3::
 ToggleDemonHunterSkill:
-global executeCount;
+global executeCount
 RemoveAllSkillFromSkillWin()
 
 if executeCount = 0
