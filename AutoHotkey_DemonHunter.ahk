@@ -447,3 +447,4 @@ return
 
 F6::
 Edit
+return
