@@ -13,7 +13,10 @@ height := 0
 
 MoveToGhomeGate()
 {
+  ControlClick,, ahk_id %d3hwnd%,,L,, NA x746 y192
   Click 746, 192
+  sleep 1500
+  Click 430,280
   sleep 3000
   MouseMove, 10, 10
 }
@@ -29,6 +32,8 @@ ItemSearchAndPick()
     _ly := 170
     _rx := width - _lx
     _ry := height - _ly
+
+
     PixelSearch, Px, Py, %_lx%, %_ly%, %_rx%, %_ry%, 0x01ef01, 6, Fast
     if ErrorLevel = 0
     {
@@ -41,14 +46,24 @@ ItemSearchAndPick()
       PixelSearch, Px, Py, %_lx%, %_ly%, %_rx%, %_ry%, 0x027af1, 6, Fast
       ;0x027af1
       if ErrorLevel = 0
-      {
+      {     
         sleep 500
         Click %Px%, %Py%
         sleep 1500
       }
       else
       {
-        return
+        PixelSearch, Px, Py, %_lx%, %_ly%, %_rx%, %_ry%, 0xe1a689, 6, Fast
+        if ErrorLevel = 0
+        {     
+          sleep 500
+          Click %Px%, %Py%
+          sleep 1500
+        }
+        else
+        {
+          return
+        }
       }
     }
   }
@@ -59,16 +74,23 @@ ExitRoom()
   global d3hwnd
   WinActivate,ahk_id %d3hwnd%
   CloseAllOpenedUI()
+  sleep 1000
   CloseAllOpenedUI()
+  sleep 1000
   CloseAllOpenedUI()
+  sleep 1000
   CloseAllOpenedUI()
+  sleep 1000
   CloseAllOpenedUI()
+  sleep 1000
   CloseAllOpenedUI()
-  Sleep 10000
+  Sleep 9000
+  CloseAllOpenedUI()
   WinActivate,ahk_id %d3hwnd%
   ControlSend, , {esc}, ahk_id %d3hwnd%
   Sleep 200
   MenuClick(139,296)
+
   Sleep 14000
   WinActivate,ahk_id %d3hwnd%
 }
@@ -93,6 +115,10 @@ RemoveAllSkillFromSkillWin()
     click l %uix% 543
     uix := uix + marginx
   }
+}
+
+EquipDHFarmingSkill()
+{
   sklx := 305
   skrx := 515
   sk1y := 145
@@ -110,7 +136,7 @@ RemoveAllSkillFromSkillWin()
     click l %sklx% %sk1y%
     click l 190 %ssky%
     click l 447 %ssky%
-    click l %rune4x% %runey%
+    click l %rune5x% %runey%
     click l 340 481
 
     click l %skrx% %sk1y%
@@ -160,17 +186,20 @@ F2::
 pause
 return
 
+executeCount := 0
 F3::
 ToggleDemonHunterSkill:
-;static executeCount := 0
+global executeCount;
 RemoveAllSkillFromSkillWin()
+
 if executeCount = 0
 {
-  
+  EquipDHFarmingSkill()
+  executeCount := 1
 }
 else
 {
-  
+  executeCount := 0
 }
 return 
 
@@ -179,29 +208,30 @@ GhomeRun:
 send, {shift up}
 InitDiabloHandle()
 WinActivate,ahk_id %d3hwnd%
+sleep 500
 OpenGameSettingSelectMode("Campaign")
 ;Change2PreviousQuest()
 MenuClick(405,400)
 MenuClick(400,365)
-MenuClick(400,432)
+MenuClick(400,435)
 MenuClick(345,460)
 MenuClick(345,395)
 ClickStartButton()
-sleep, 24000
+sleep, 20000
 ; open map and move to ghome
 WinActivate,ahk_id %d3hwnd%
 Send, {space}
 sleep 100
 ;ControlSend, , m, ahk_id %d3hwnd%
 Send, m
-Sleep, 2000
+Sleep, 200
 WinActivate,ahk_id %d3hwnd%
 Click 257, 464
 Sleep, 6000
 WinActivate,ahk_id %d3hwnd%
 MoveToGhomeGate()
 Click 780, 68
-Sleep, 4000
+Sleep, 3500
 Click 780, 68
 Sleep, 6000
 WinActivate,ahk_id %d3hwnd%
@@ -213,8 +243,8 @@ WinActivate,ahk_id %d3hwnd%
 ItemSearchAndPick()
 ;ControlSend, , t, ahk_id %d3hwnd%
 Send, T
-ControlSend, , i, ahk_id %d3hwnd%
-sleep 9000
+;ControlSend, , i, ahk_id %d3hwnd%
+sleep 5000
 ExitRoom()
 Send, {F4}
 goto GhomeRun
@@ -222,7 +252,7 @@ return
 
 FightGh:
 Click 780, 68
-Sleep, 2200
+Sleep, 2500
 Click 680, 145
 Sleep, 3000
 send, 1
@@ -442,8 +472,8 @@ MenuClick(x, y, align = "m")
 
 F5::
 Reload
-MsgBox, 4,, The script could not be reloaded. Would you like to open it for editing?
-IfMsgBox, Yes, Edit
+;MsgBox, 4,, The script could not be reloaded. Would you like to open it for editing?
+;IfMsgBox, Yes, Edit
 return
 
 F6::
