@@ -213,6 +213,7 @@ WinActivate,ahk_id %d3hwnd%
 ItemSearchAndPick()
 ;ControlSend, , t, ahk_id %d3hwnd%
 Send, T
+ControlSend, , i, ahk_id %d3hwnd%
 sleep 9000
 ExitRoom()
 Send, {F4}
