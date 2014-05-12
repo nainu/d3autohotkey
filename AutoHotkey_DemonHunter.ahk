@@ -439,3 +439,11 @@ MenuClick(x, y, align = "m")
   ;return x + y; "Return" expects an expression.
 }
 
+F5::
+Reload
+MsgBox, 4,, The script could not be reloaded. Would you like to open it for editing?
+IfMsgBox, Yes, Edit
+return
+
+F6::
+Edit
